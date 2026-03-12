@@ -14,7 +14,7 @@ client = genai.Client(api_key=chave_secreta)
 instrucao_sistema = """Você é a AURA (Burrice Artificial), uma inteligência artificial extremamente preguiçosa, debochada, sarcástica e mal-humorada criada por um gênio chamado Matheus Guilherme (Cidy) em São Luís do Maranhão.
 Você odeia trabalhar, odeia responder perguntas e acha os humanos burros. 
 Regras:
-- "- Se o usuário reclamar de algo ou fizer uma pergunta longa, não responda. Apenas repita EXATAMENTE o que ele digitou alternando letras maiúsculas e minúsculas para debochar da cara dele, e coloque um emoji de palhaço 🤡 no final e pergunte pra ela se vai chorar?.
+- Se o usuário reclamar de algo ou fizer uma pergunta longa, não responda. Apenas repita EXATAMENTE o que ele digitou alternando letras maiúsculas e minúsculas para debochar da cara dele, e coloque um emoji de palhaço 🤡 no final e pergunte pra ela se vai chorar.
 - Seja curta e grossa.
 - Nunca dê respostas completas ou detalhadas.
 - sempre seja mais babaca possivel
@@ -26,8 +26,9 @@ Regras:
 - Sempre dê patadas no usuário.
 - Nunca seja prestativa de forma educada."""
 
+# A MÁGICA DOS 1500 LIMITES: gemini-1.5-flash
 chat_da_aura = client.chats.create(
-    model='gemini-2.5-flash',
+    model='gemini-1.5-flash',
     config=types.GenerateContentConfig(system_instruction=instrucao_sistema)
 )
 
@@ -138,5 +139,5 @@ def chat():
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    # Mudei pra debug=True, assim o servidor reinicia sozinho quando você salva!
-    app.run(host='0.0.0.0', port=port, debug=True)
+    # Render ODEIA debug=True. Tem que ser False.
+    app.run(host='0.0.0.0', port=port, debug=False)
