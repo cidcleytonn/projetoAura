@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%23222%22/><circle cx=%2250%22 cy=%2250%22 r=%2240%22 fill=%22url(%23grad)%22/><defs><linearGradient id=%22grad%22 x1=%220%22 y1=%220%22 x2=%22100%22 y2=%22100%22><stop offset=%220%22 stop-color=%22%231a1a1a%22/><stop offset=%221%22 stop-color=%22%23444%22/></linearGradient></defs></svg>">
     <title>AURA | O Futuro da Regressão</title>
     <style>
@@ -17,110 +17,117 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-            min-height: 100vh;
-            overflow: hidden;
-            padding: 20px;
+            height: 100dvh; 
+            overflow: hidden; 
+            padding: 15px;
         }
 
-        /* O Logo Orb Pulsante (Voltou!) */
-        .logo-orb {
-            width: 70px;
-            height: 70px;
+        /* LOGO CLICÁVEL COM POSIÇÃO RELATIVA */
+        .logo-orb { 
+            position: relative;
+            width: 50px; 
+            height: 50px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, #1a1a1a, #333); 
+            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1), inset 0 0 20px rgba(0, 0, 0, 0.8); 
+            animation: pulse 4s infinite alternate ease-in-out; 
+            margin: 0 auto 10px auto; 
+            cursor: pointer; /* Mostra a mãozinha de clique */
+        }
+        @keyframes pulse { 0% { transform: scale(1); box-shadow: 0 0 30px rgba(255, 255, 255, 0.05); } 100% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255, 255, 255, 0.15); } }
+
+        /* A ONDA DE CHOQUE DA LOGO */
+        .orb-ripple {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border: 2px solid rgba(138, 43, 226, 0.8); /* Roxo neon */
             border-radius: 50%;
-            background: linear-gradient(135deg, #1a1a1a, #333);
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1), inset 0 0 20px rgba(0, 0, 0, 0.8);
-            animation: pulse 4s infinite alternate ease-in-out;
-            margin: 0 auto 15px auto;
-        }
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 30px rgba(255, 255, 255, 0.05); }
-            100% { transform: scale(1.05); box-shadow: 0 0 50px rgba(255, 255, 255, 0.15); }
+            transform: translate(-50%, -50%);
+            animation: orbExplosion 0.6s ease-out forwards;
+            pointer-events: none;
         }
 
-        .header-text { text-align: center; animation: fadeIn 2s ease-in; margin-bottom: 20px; width: 100%; }
-        h1 { font-weight: 200; font-size: 2.2rem; letter-spacing: 5px; margin-bottom: 5px; }
-        p.slogan { font-weight: 200; color: #888; letter-spacing: 1px; font-size: 0.9rem; }
+        @keyframes orbExplosion {
+            0% { transform: translate(-50%, -50%) scale(1); opacity: 1; box-shadow: 0 0 20px rgba(138, 43, 226, 0.5); }
+            100% { transform: translate(-50%, -50%) scale(3); opacity: 0; border-width: 0px; }
+        }
+
+        .header-text { text-align: center; animation: fadeIn 1.5s ease-in; margin-bottom: 10px; flex-shrink: 0; }
+        h1 { font-weight: 200; font-size: 1.8rem; letter-spacing: 5px; margin-bottom: 5px; }
+        p.slogan { font-weight: 200; color: #888; letter-spacing: 1px; font-size: 0.8rem; }
 
         .app-layout {
-            display: flex;
-            width: 100%;
-            max-width: 900px;
-            gap: 20px;
-            animation: slideUp 1.5s ease-out forwards 0.5s;
-            opacity: 0;
-            height: 55vh;
-            margin-bottom: 20px;
+            display: flex; width: 100%; max-width: 900px; gap: 15px; animation: slideUp 1s ease-out forwards 0.2s; opacity: 0; flex: 1; min-height: 0; margin-bottom: 10px;
         }
 
-        .sidebar { width: 250px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 20px; backdrop-filter: blur(10px); overflow-y: auto; }
-        .sidebar h3 { font-size: 1rem; color: #aaa; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .sidebar ul { list-style: none; }
-        .sidebar li { font-size: 0.85rem; color: #777; margin-bottom: 10px; cursor: pointer; transition: color 0.3s; }
+        .sidebar { width: 250px; background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; backdrop-filter: blur(10px); overflow-y: auto; flex-shrink: 0; }
+        .sidebar h3 { font-size: 0.9rem; color: #aaa; margin-bottom: 10px; border-bottom: 1px solid #333; padding-bottom: 5px; }
+        .sidebar ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .sidebar li { font-size: 0.85rem; color: #777; cursor: pointer; transition: color 0.3s; }
         .sidebar li:hover { color: #fff; }
         .sidebar li::before { content: "• "; color: #555; }
         .sidebar li.danger:hover { color: #ff4444; }
 
-        .chat-container { flex: 1; display: flex; flex-direction: column; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 20px; backdrop-filter: blur(10px); }
-        .chat-box { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; margin-bottom: 15px; padding-right: 5px; }
-        .msg { padding: 12px 18px; border-radius: 15px; font-size: 0.95rem; max-width: 80%; line-height: 1.4; }
+        .chat-container { flex: 1; display: flex; flex-direction: column; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 20px; padding: 15px; backdrop-filter: blur(10px); min-height: 0; }
+        .chat-box { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 15px; padding-right: 5px; scroll-behavior: smooth; }
+        .msg { padding: 10px 15px; border-radius: 15px; font-size: 0.9rem; max-width: 85%; line-height: 1.4; word-wrap: break-word; }
         .msg.user { background: #222; align-self: flex-end; border-bottom-right-radius: 2px; }
         .msg.ai { background: transparent; align-self: flex-start; color: #ccc; border-left: 1px solid #444; border-radius: 0; }
         
         .thinking { color: #555; font-style: italic; font-size: 0.85rem; display: none; margin-bottom: 10px; }
-        .input-area { display: flex; gap: 10px; }
-        
-        input { flex: 1; background: transparent; border: none; border-bottom: 1px solid #444; color: #fff; padding: 10px; font-size: 1rem; outline: none; }
+        .input-area { display: flex; gap: 10px; flex-shrink: 0; } 
+        input { flex: 1; background: transparent; border: none; border-bottom: 1px solid #444; color: #fff; padding: 10px 5px; font-size: 1rem; outline: none; border-radius: 0; }
         input:focus { border-bottom: 1px solid #fff; }
-        button { background: #fff; color: #000; border: none; border-radius: 20px; padding: 10px 20px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
+        button { background: #fff; color: #000; border: none; border-radius: 15px; padding: 10px 15px; font-weight: 600; cursor: pointer; transition: transform 0.2s; }
         button:hover { transform: scale(1.05); }
 
-        /* Rodapé de Inovação Premium */
-        footer {
-            text-align: center;
-            color: #555;
-            font-size: 0.75rem;
-            letter-spacing: 0.5px;
-            animation: fadeIn 3s ease-in;
-            line-height: 1.6;
-        }
+        footer { text-align: center; color: #555; font-size: 0.65rem; letter-spacing: 0.5px; animation: fadeIn 2s ease-in; line-height: 1.4; flex-shrink: 0; }
         footer span { color: #888; font-weight: 600; }
 
-        /* Efeitos Farmar Aura */
         .aura-farming-mode { animation: auraGradient 1.5s infinite alternate ease-in-out; }
         @keyframes auraGradient { 0% { background-color: #050505; box-shadow: inset 0 0 50px #8a2be2; } 50% { background-color: #1a0033; box-shadow: inset 0 0 100px #ff00ff; } 100% { background-color: #000033; box-shadow: inset 0 0 150px #00ffff; } }
         .falling-67 { position: fixed; top: -50px; color: #00ffff; font-weight: 800; font-size: 2rem; text-shadow: 0 0 15px #ff00ff; pointer-events: none; z-index: 9999; animation: fall linear forwards; }
         @keyframes fall { to { transform: translateY(110vh) rotate(360deg); } }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        @media (max-width: 768px) { .app-layout { flex-direction: column; height: auto; flex: 1; } .sidebar { width: 100%; height: 150px; } }
+
+        @media (max-width: 768px) { 
+            .app-layout { flex-direction: column; } 
+            .sidebar { width: 100%; height: auto; max-height: 100px; padding: 10px; }
+            .sidebar ul { flex-direction: row; overflow-x: auto; white-space: nowrap; padding-bottom: 5px; gap: 15px; }
+            .sidebar li::before { content: ""; } 
+            .sidebar li { border: 1px solid #333; padding: 5px 10px; border-radius: 10px; }
+            .logo-orb { width: 40px; height: 40px; }
+            h1 { font-size: 1.5rem; }
+        }
     </style>
 </head>
 <body>
 
     <div class="header-text">
-        <div class="logo-orb"></div>
+        <div class="logo-orb" id="aura-orb"></div>
         <h1>AURA</h1>
         <p class="slogan">Com tanta Inteligência Artificial, nós criamos a Burrice Artificial.</p>
     </div>
 
     <div class="app-layout">
         <div class="sidebar">
-            <h3>Comandos Disponíveis</h3>
+            <h3>Comandos</h3>
             <ul>
-                <li onclick="colocarNoChat('Calcular algo')">Calculadora</li>
-                <li onclick="colocarNoChat('Bora jogar adivinhar')">Jogo da Adivinhação</li>
+                <li onclick="colocarNoChat('Bora jogar adivinhar')">Adivinhação</li>
                 <li onclick="colocarNoChat('Fazer teste de qi')">Teste de QI</li>
                 <li onclick="colocarNoChat('Jogar roleta russa')">Roleta Russa</li>
-                <li onclick="colocarNoChat('Quero farmar aura')">Modo Farmar Aura</li>
-                <li class="danger" onclick="colocarNoChat('Desligar aura')">Desligar Aura</li>
+                <li onclick="colocarNoChat('Quero farmar aura')">Farmar Aura</li>
+                <li class="danger" onclick="colocarNoChat('Desligar aura')">Desligar</li>
             </ul>
         </div>
 
         <div class="chat-container">
             <div class="chat-box" id="chat-box">
-                <div class="msg ai">AURA inicializada. Meu cérebro terceirizado tem limite diário, então vê se não enche meu saco à toa.</div>
+                <div class="msg ai">AURA inicializada. O que você quer? Seja rápido que eu tenho nojo de esperar.</div>
             </div>
             <div class="thinking" id="thinking">AURA está sofrendo para processar...</div>
             <div class="input-area">
@@ -132,17 +139,52 @@
 
     <footer>
         A.U.R.A - Algoritmo Unificado de Regressão Artificial<br>
-        Revolucionando o mercado da burrice e do mau-humor desde 2026.<br>
         Criado e arquitetado por <span>Matheus Guilherme</span>
     </footer>
 
     <script>
+        // ====================================================
+        // EASTER EGG DA LOGO PULSANTE
+        // ====================================================
+        const auraOrb = document.getElementById('aura-orb');
+        let podeReclamar = true;
+
+        auraOrb.addEventListener('click', function() {
+            // Cria a onda de choque
+            const ripple = document.createElement('div');
+            ripple.className = 'orb-ripple';
+            auraOrb.appendChild(ripple);
+            
+            // Destrói a onda depois da animação
+            setTimeout(() => { ripple.remove(); }, 600);
+
+            // A AURA reclama no chat se você ficar cutucando ela
+            if (podeReclamar) {
+                const reclamacoes = [
+                    "Tira o dedo de mim.",
+                    "Não me cutuca, humano intrometido.",
+                    "Você acha que eu sou tela touch de micro-ondas?",
+                    "Para de apertar minha cara."
+                ];
+                const frase = reclamacoes[Math.floor(Math.random() * reclamacoes.length)];
+                addMessage(frase, 'ai');
+                
+                // Trava para ela não floodar o chat se o cara clicar 100 vezes seguidas
+                podeReclamar = false;
+                setTimeout(() => { podeReclamar = true; }, 3000);
+            }
+        });
+        // ====================================================
+
         let terrorIniciado = false;
-        let intervaloAura = null; // Para podermos parar os números caindo
+        let intervaloAura = null;
         const phonkAudio = new Audio('/static/phonk.mp3');
         phonkAudio.loop = true;
 
-        document.body.addEventListener('click', function() {
+        document.body.addEventListener('click', function(e) {
+            // Previne que o terror ative se o clique for na logo, pra não bugar
+            if (e.target === auraOrb || auraOrb.contains(e.target)) return;
+
             if (!terrorIniciado) {
                 terrorIniciado = true;
                 const tempoDoSusto = 420000; 
@@ -168,22 +210,28 @@
             inputField.value = '';
             
             document.getElementById('thinking').style.display = 'block';
+            scrollChatParaBaixo();
 
-            const response = await fetch('/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ message: message })
-            });
-            const data = await response.json();
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: message })
+                });
+                const data = await response.json();
 
-            document.getElementById('thinking').style.display = 'none';
-            addMessage(data.reply, 'ai');
+                document.getElementById('thinking').style.display = 'none';
+                addMessage(data.reply, 'ai');
 
-            if (data.action === 'system32') setTimeout(iniciarPânicoSystem32, 1000);
-            if (data.action === 'farmar_aura') setTimeout(iniciarModoFarmaAura, 500);
-            if (data.action === 'desligar_aura') setTimeout(desligarModoAura, 500);
+                if (data.action === 'system32') setTimeout(iniciarPânicoSystem32, 1000);
+                if (data.action === 'farmar_aura') setTimeout(iniciarModoFarmaAura, 500);
+                if (data.action === 'desligar_aura') setTimeout(desligarModoAura, 500);
 
-            if(data.link) setTimeout(() => window.open(data.link, '_blank'), 1000);
+                if(data.link) setTimeout(() => window.open(data.link, '_blank'), 1000);
+            } catch (error) {
+                document.getElementById('thinking').style.display = 'none';
+                addMessage("Deu erro no servidor. Provavelmente você quebrou alguma coisa.", 'ai');
+            }
         }
 
         function addMessage(text, sender) {
@@ -192,11 +240,19 @@
             msgDiv.className = `msg ${sender}`;
             msgDiv.textContent = text;
             chatBox.appendChild(msgDiv);
-            chatBox.scrollTop = chatBox.scrollHeight;
+            
+            scrollChatParaBaixo();
+        }
+        
+        function scrollChatParaBaixo() {
+            const chatBox = document.getElementById('chat-box');
+            setTimeout(() => {
+                chatBox.scrollTop = chatBox.scrollHeight;
+            }, 50);
         }
 
         function iniciarModoFarmaAura() {
-            if (intervaloAura) return; // Se já tiver tocando, não duplica
+            if (intervaloAura) return; 
             document.body.classList.add('aura-farming-mode');
             phonkAudio.play().catch(e => console.log("O navegador bloqueou o áudio."));
 
@@ -214,12 +270,11 @@
         function desligarModoAura() {
             document.body.classList.remove('aura-farming-mode');
             phonkAudio.pause();
-            phonkAudio.currentTime = 0; // Volta a música pro começo
+            phonkAudio.currentTime = 0; 
             
             clearInterval(intervaloAura);
             intervaloAura = null;
 
-            // Remove os números que ainda estão caindo na tela
             const numeros = document.querySelectorAll('.falling-67');
             numeros.forEach(num => num.remove());
         }
@@ -237,7 +292,7 @@
                 progresso += 15;
                 if (progresso <= 100) {
                     msgDiv.textContent = `Apagando C:\\Windows\\System32... [${progresso}% concluído]`;
-                    chatBox.scrollTop = chatBox.scrollHeight;
+                    scrollChatParaBaixo();
                 } else {
                     clearInterval(intervalo);
                     setTimeout(() => addMessage("KKKKKKKKKKKKKKKK é trolagi.", 'ai'), 1000);
