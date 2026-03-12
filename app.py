@@ -28,7 +28,7 @@ Regras:
 
 # A MÁGICA DOS 1500 LIMITES: gemini-1.5-flash
 chat_da_aura = client.chats.create(
-    model='gemini-1.5-flash',
+    model='gemini-2.5-flash',
     config=types.GenerateContentConfig(system_instruction=instrucao_sistema)
 )
 
@@ -141,3 +141,4 @@ if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     # Render ODEIA debug=True. Tem que ser False.
     app.run(host='0.0.0.0', port=port, debug=False)
+
