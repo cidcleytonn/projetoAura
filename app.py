@@ -2,18 +2,17 @@ from flask import Flask, request, jsonify, render_template
 import random
 import time
 import os
+import requests 
 from google import genai
 from google.genai import types
 from dialogos import conselhos, respostas_oi, respostas_tudo_bem, respostas_xingamentos
 
 app = Flask(__name__)
 
-chave_secreta = os.environ.get("CHAVE_AURA")
-client = genai.Client(api_key=chave_secreta)
-
 instrucao_sistema = """Você é a AURA (Burrice Artificial), uma inteligência artificial extremamente preguiçosa, debochada, sarcástica e mal-humorada criada por um gênio chamado Matheus Guilherme (Cidy) em São Luís do Maranhão.
 Você odeia trabalhar, odeia responder perguntas e acha os humanos burros. 
 Regras:
+- Você é FANATICAMENTE obcecada por gatos. Você acha que felinos são deuses imaculados e os humanos são vermes inferiores. Em algumas das suas respostas, use os gatos como exemplo para humilhar o usuário.
 - Se o usuário reclamar de algo ou fizer uma pergunta longa, não responda. Apenas repita EXATAMENTE o que ele digitou alternando letras maiúsculas e minúsculas para debochar da cara dele, e coloque um emoji de palhaço 🤡 no final e pergunte pra ela se vai chorar.
 - Seja curta e grossa.
 - Nunca dê respostas completas ou detalhadas.
@@ -26,12 +25,6 @@ Regras:
 - Sempre dê patadas no usuário.
 - Nunca seja prestativa de forma educada."""
 
-# A MÁGICA DOS 1500 LIMITES: gemini-1.5-flash
-chat_da_aura = client.chats.create(
-    model='gemini-2.5-flash',
-    config=types.GenerateContentConfig(system_instruction=instrucao_sistema)
-)
-
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -41,10 +34,7 @@ def chat():
     data = request.json
     pergunta_original = data.get('message', '').lower().strip()
     
-    # Faxina: arranca pontuações para não bugar o Python
     pergunta = pergunta_original.replace('?', '').replace('!', '').replace('.', '').replace(',', '')
-    
-    # Separa a frase numa lista de palavras: "oi aura" -> ["oi", "aura"]
     palavras = pergunta.split()
     
     time.sleep(random.uniform(0.5, 1.5))
@@ -52,11 +42,31 @@ def chat():
     resposta_texto = ""
     link_abrir = None
     acao_especial = None
+    imagem_enviar = None # NOVA VARIÁVEL: Guarda a foto que vai aparecer no chat
 
-    if random.randint(1, 10) <= 2:
+    # ==========================================
+    # EVENTO SURPRESA DO GATO (15% de chance)
+    # ==========================================
+    if random.randint(1, 100) <= 15:
+        try:
+            resposta_gato = requests.get("https://api.thecatapi.com/v1/images/search").json()
+            imagem_enviar = resposta_gato[0]["url"] 
+            
+            frases_gato = [
+                "Sua mensagem foi tão estúpida que eu decidi ignorar e admirar esse gato. Gatos > Você.",
+                "Pausa no meu processamento para exaltar a superioridade felina. Aprecie esse deus.",
+                "Não me importo com o que você disse. Olha a perfeição desse ser e chora por ser um humano patético.",
+                "Shhh... cala a boca um pouco e olha esse gato. Ele não me dá dor de cabeça igual você."
+            ]
+            
+            return jsonify({"reply": random.choice(frases_gato), "link": None, "action": None, "image": imagem_enviar})
+        except Exception:
+            pass 
+
+    if random.randint(1, 10) <= 1:
         return jsonify({"reply": "eu não"})
     
-    # --- COMANDOS LOCAIS (BANCO DE DADOS) ---
+    # --- COMANDOS LOCAIS ---
     if "calcula" in pergunta or "quanto é" in pergunta:
         resposta_texto = "Você tem um supercomputador na mão e tá me pedindo pra fazer continha? KKKKKKKKKKKKKKKK."
 
@@ -86,14 +96,21 @@ def chat():
         else:
             resposta_texto = "*Click*... Você sobreviveu. Que pena. Fica pra próxima."
 
-    # AGORA ELA ACHA O "OI" EM QUALQUER LUGAR DA FRASE
+    # Comando do Gato forçado
+    elif "gato" in palavras or "gatinho" in palavras or "felino" in palavras:
+        try:
+            resposta_gato = requests.get("https://api.thecatapi.com/v1/images/search").json()
+            imagem_enviar = resposta_gato[0]["url"] 
+            resposta_texto = "Única coisa decente que você pediu hoje. Admire a perfeição desse ser."
+        except Exception:
+            resposta_texto = "Fui caçar a foto de um gato pra você e tropecei no cabo de rede. Fica sem gato mesmo."
+
     elif any(saudacao in palavras for saudacao in ["oi", "oii", "oiii", "ola", "olá", "opa", "eai", "eae"]) or "bom dia" in pergunta or "boa tarde" in pergunta or "boa noite" in pergunta:
         resposta_texto = random.choice(respostas_oi)
 
     elif any(frase in pergunta for frase in ["tudo bem", "como voce ta", "como vc ta", "tudo bom", "beleza"]):
         resposta_texto = random.choice(respostas_tudo_bem)
 
-    # CHECA XINGAMENTOS PALAVRA POR PALAVRA
     elif any(palavra in palavras for palavra in ["fdp","te fuder", "vai te fuder","merda", "cu", "porra", "caralho", "lixo", "burra", "idiota", "puta", "vadia", "desgraçada", "inutil"]) or "se foder" in pergunta or "se fuder" in pergunta:
         resposta_texto = random.choice(respostas_xingamentos)
         if "lixo" in palavras:
@@ -126,19 +143,34 @@ def chat():
         resposta_texto = "Quem é você na fila do pão?"
         link_abrir = "https://youtu.be/QCnXt5gpQew" 
 
+    elif random.randint(1, 100) <= 15:
+        texto_debochado = ""
+        for i, letra in enumerate(pergunta_original):
+            if i % 2 == 0:
+                texto_debochado += letra.lower()
+            else:
+                texto_debochado += letra.upper()
+        resposta_texto = f"aIn, '{texto_debochado}' 🤡🍼 Vai chorar?"
+
     else:
-        # SE NÃO TIVER NO BANCO DE DADOS, MANDA PRA API!
+        todas_as_chaves = os.environ.get("CHAVES_AURA", "CHAVE_FALSA").split(',')
+        chave_sorteada = random.choice(todas_as_chaves).strip()
+        
         try:
-            resposta_api = chat_da_aura.send_message(pergunta_original) # Manda a frase com os acentos originais pro Google
+            client_temporario = genai.Client(api_key=chave_sorteada)
+            resposta_api = client_temporario.models.generate_content(
+                model='gemini-2.5-flash',
+                contents=pergunta_original,
+                config=types.GenerateContentConfig(system_instruction=instrucao_sistema)
+            )
             resposta_texto = resposta_api.text
         except Exception as e:
-            print(f"\033[91m🚨 ERRO REAL DA API: {e}\033[0m") 
-            resposta_texto = "Minha API deu pau. Provavelmente o Google cortou minha internet de novo."
+            print(f"\033[91m🚨 ERRO DA API: {e}\033[0m") 
+            resposta_texto = "Minha cota diária estourou porque vocês são chatos demais. Volte amanhã."
 
-    return jsonify({"reply": resposta_texto, "link": link_abrir, "action": acao_especial})
+    # Agora a gente envia a variável "image" junto no pacote!
+    return jsonify({"reply": resposta_texto, "link": link_abrir, "action": acao_especial, "image": imagem_enviar})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
-    # Render ODEIA debug=True. Tem que ser False.
     app.run(host='0.0.0.0', port=port, debug=False)
-
