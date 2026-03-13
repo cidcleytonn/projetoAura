@@ -44,9 +44,14 @@ def chat():
     acao_especial = None
     imagem_enviar = None # NOVA VARIÁVEL: Guarda a foto que vai aparecer no chat
 
-    # ==========================================
-    # EVENTO SURPRESA DO GATO (15% de chance)
-    # ==========================================
+   if "conselho" in palavras or "ajuda" in palavras:
+        # Se a pergunta tiver palavras relacionadas a romance
+        if any(p in pergunta for p in ["amor", "namoro", "ex", "crush", "gosto dela", "gosto dele", "apaixonado", "apaixonada"]):
+            resposta_texto = "Vou te dar o único conselho real: Ela não te ama. Você é a segunda opção, o 'tanto faz'. Para de passar vergonha e ouve essa música aqui, combina com o seu estado deplorável."
+            link_abrir = "https://www.youtube.com/watch?v=4q9UafsiQ6k" # Black - Pearl Jam
+        else:
+            resposta_texto = random.choice(conselhos)
+            
     if random.randint(1, 100) <= 15:
         try:
             resposta_gato = requests.get("https://api.thecatapi.com/v1/images/search").json()
@@ -174,3 +179,4 @@ def chat():
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
+
