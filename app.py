@@ -63,7 +63,7 @@ def chat():
         except Exception:
             pass 
 
-    # Evento Preguiça Absoluta
+    # Evento Preguiça (10% de chance)
     if random.randint(1, 10) <= 1:
         return jsonify({"reply": "eu não"})
     
@@ -105,11 +105,11 @@ def chat():
         except Exception:
             resposta_texto = "Fui caçar a foto de um gato pra você e tropecei no cabo de rede. Fica sem gato mesmo."
 
-    # --- A NOVA LÓGICA DE QUEBRAR CORAÇÕES ---
+    # LÓGICA DO PEARL JAM
     elif "conselho" in palavras or "ajuda" in palavras:
         if any(p in pergunta for p in ["amor", "namoro", "ex", "crush", "gosto dela", "gosto dele", "apaixonado", "apaixonada"]):
             resposta_texto = "Vou te dar o único conselho real: Ela não te ama. Você é a segunda opção, o 'tanto faz'. Para de passar vergonha e ouve essa música aqui, combina com o seu estado deplorável."
-            link_abrir = "https://www.youtube.com/watch?v=4q9UafsiQ6k" # Black - Pearl Jam
+            link_abrir = "https://www.youtube.com/watch?v=4q9UafsiQ6k" 
         else:
             resposta_texto = random.choice(conselhos)
 
