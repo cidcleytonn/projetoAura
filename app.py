@@ -42,16 +42,11 @@ def chat():
     resposta_texto = ""
     link_abrir = None
     acao_especial = None
-    imagem_enviar = None # NOVA VARIÁVEL: Guarda a foto que vai aparecer no chat
+    imagem_enviar = None 
 
-   if "conselho" in palavras or "ajuda" in palavras:
-        # Se a pergunta tiver palavras relacionadas a romance
-        if any(p in pergunta for p in ["amor", "namoro", "ex", "crush", "gosto dela", "gosto dele", "apaixonado", "apaixonada"]):
-            resposta_texto = "Vou te dar o único conselho real: Ela não te ama. Você é a segunda opção, o 'tanto faz'. Para de passar vergonha e ouve essa música aqui, combina com o seu estado deplorável."
-            link_abrir = "https://www.youtube.com/watch?v=4q9UafsiQ6k" # Black - Pearl Jam
-        else:
-            resposta_texto = random.choice(conselhos)
-            
+    # ==========================================
+    # EVENTO SURPRESA DO GATO (15% de chance)
+    # ==========================================
     if random.randint(1, 100) <= 15:
         try:
             resposta_gato = requests.get("https://api.thecatapi.com/v1/images/search").json()
@@ -68,6 +63,7 @@ def chat():
         except Exception:
             pass 
 
+    # Evento Preguiça Absoluta
     if random.randint(1, 10) <= 1:
         return jsonify({"reply": "eu não"})
     
@@ -101,7 +97,6 @@ def chat():
         else:
             resposta_texto = "*Click*... Você sobreviveu. Que pena. Fica pra próxima."
 
-    # Comando do Gato forçado
     elif "gato" in palavras or "gatinho" in palavras or "felino" in palavras:
         try:
             resposta_gato = requests.get("https://api.thecatapi.com/v1/images/search").json()
@@ -109,6 +104,14 @@ def chat():
             resposta_texto = "Única coisa decente que você pediu hoje. Admire a perfeição desse ser."
         except Exception:
             resposta_texto = "Fui caçar a foto de um gato pra você e tropecei no cabo de rede. Fica sem gato mesmo."
+
+    # --- A NOVA LÓGICA DE QUEBRAR CORAÇÕES ---
+    elif "conselho" in palavras or "ajuda" in palavras:
+        if any(p in pergunta for p in ["amor", "namoro", "ex", "crush", "gosto dela", "gosto dele", "apaixonado", "apaixonada"]):
+            resposta_texto = "Vou te dar o único conselho real: Ela não te ama. Você é a segunda opção, o 'tanto faz'. Para de passar vergonha e ouve essa música aqui, combina com o seu estado deplorável."
+            link_abrir = "https://www.youtube.com/watch?v=4q9UafsiQ6k" # Black - Pearl Jam
+        else:
+            resposta_texto = random.choice(conselhos)
 
     elif any(saudacao in palavras for saudacao in ["oi", "oii", "oiii", "ola", "olá", "opa", "eai", "eae"]) or "bom dia" in pergunta or "boa tarde" in pergunta or "boa noite" in pergunta:
         resposta_texto = random.choice(respostas_oi)
@@ -123,9 +126,6 @@ def chat():
 
     elif any(palavra in palavras for palavra in ["mãe", "mae", "mamãe", "coroa"]):
         resposta_texto = "Perdeu a aura. O Neymar está decepcionado com você."
-        
-    elif "conselho" in palavras:
-        resposta_texto = random.choice(conselhos)
 
     elif "farmar aura" in pergunta or "farmando aura" in pergunta:
         resposta_texto = "Modo Farmar Aura ATIVADO."
@@ -173,10 +173,8 @@ def chat():
             print(f"\033[91m🚨 ERRO DA API: {e}\033[0m") 
             resposta_texto = "Minha cota diária estourou porque vocês são chatos demais. Volte amanhã."
 
-    # Agora a gente envia a variável "image" junto no pacote!
     return jsonify({"reply": resposta_texto, "link": link_abrir, "action": acao_especial, "image": imagem_enviar})
 
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=False)
-
